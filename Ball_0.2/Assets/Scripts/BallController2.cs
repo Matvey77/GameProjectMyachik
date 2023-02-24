@@ -83,8 +83,6 @@ public class BallController2 : Entity
         float movement = Input.GetAxis("Horizontal");
         transform.position += new Vector3(movement, 0, 0) * speedMove * Time.deltaTime;
 
-        Debug.Log(Time.deltaTime);
-
         Vector3 rotation = transform.rotation.eulerAngles;
         rotation.z -= movement * speedRotation * Time.deltaTime * 100;
         transform.rotation = Quaternion.Euler(rotation);
