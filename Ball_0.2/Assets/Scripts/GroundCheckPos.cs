@@ -19,7 +19,7 @@ public class GroundCheckPos : MonoBehaviour
         if (player != null)
         {
             pos = player.position;
-            pos.y = pos.y - 0.44f;
+            pos.y = pos.y - 0.30f;
             transform.position = pos;
 
             rotation = transform.rotation.eulerAngles;

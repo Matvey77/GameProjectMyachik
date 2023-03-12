@@ -111,7 +111,7 @@ public class BallController2 : Entity
 
     private void Jump()
     {
-        rb.AddForce(Vector2.up * jumpForce);
+         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         //rb.velocity = Vector2.up * jumpForce;
         //rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
     }
