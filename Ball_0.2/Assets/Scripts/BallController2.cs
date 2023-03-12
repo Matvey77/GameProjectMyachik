@@ -7,20 +7,26 @@ using static UnityEngine.GraphicsBuffer;
 public class BallController2 : Entity
 {
     [SerializeField] private float speedMove = 6f;
-    [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float speedRotation = 3;
     [SerializeField] private int lives = 3;
+    [SerializeField] private float jumpForce = 10f;
     [SerializeField] private int maxJumpCount = 1;
     [SerializeField] private float JumpUpdateTime = 0.3f;
+    [SerializeField] private float divingForce = 10f;
 
     private int jumpCount;
     private bool isGrounded = false;
+
+    private bool isLoaded = false;
+
+    private float movement;
 
     private bool flagJumpUpdate = true;
 
     public Transform groundCheck;
     public float checkDistanseToGround;
     public LayerMask whatIsGround;
+    public LayerMask whatIsGround2;
 
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
@@ -41,12 +47,21 @@ public class BallController2 : Entity
     {
         CheckGround();
 
+        movement = Input.GetAxis("Horizontal");
+
+
     }
 
     private void Update()
     {
-        if (Input.GetButton("Horizontal")) 
+        if (Input.GetButton("Horizontal"))
             Run();
+
+        if ((Input.GetAxis("Vertical") == -1) && (isLoaded == true))
+        {
+            Diving();
+        }
+
 
         if (Input.GetButtonDown("Jump") && (jumpCount > 0))
         {
@@ -61,7 +76,7 @@ public class BallController2 : Entity
             UpdateJumpCount();
         }
 
-        if ((lives < 1 || transform.position.y < -10))
+        if ((lives < 1 || transform.position.y < -20))
         {
             Die();
         }
@@ -80,17 +95,24 @@ public class BallController2 : Entity
 
     private void Run()
     {
-        float movement = Input.GetAxis("Horizontal");
-        transform.position += new Vector3(movement, 0, 0) * speedMove * Time.deltaTime;
+        rb.AddForce(new Vector2(movement * speedMove, 0f), ForceMode2D.Impulse);
+
+        //transform.position += new Vector3(movement, 0, 0) * speedMove * Time.deltaTime;
 
         Vector3 rotation = transform.rotation.eulerAngles;
         rotation.z -= movement * speedRotation * Time.deltaTime * 100;
         transform.rotation = Quaternion.Euler(rotation);
     }
 
+    private void Diving()
+    {
+        rb.AddForce(Vector2.down * divingForce);
+    }
+
     private void Jump()
     {
-        rb.velocity = Vector2.up * jumpForce;
+        rb.AddForce(Vector2.up * jumpForce);
+        //rb.velocity = Vector2.up * jumpForce;
         //rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
     }
 
@@ -98,6 +120,8 @@ public class BallController2 : Entity
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.transform.position,
                                              checkDistanseToGround, whatIsGround);
+        isLoaded = Physics2D.OverlapCircle(groundCheck.transform.position,
+                                             checkDistanseToGround, whatIsGround2);
     }
 
     private void OnDrawGizmos()
