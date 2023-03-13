@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6610352695897327771}
   - component: {fileID: 6610352695897327768}
   - component: {fileID: 6610352695897327769}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ BuoyancyEffector2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_SurfaceLevel: 1.65
-  m_Density: 5
+  m_Density: 100
   m_LinearDrag: 10
   m_AngularDrag: 3
   m_FlowAngle: 0

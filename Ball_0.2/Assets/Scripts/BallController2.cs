@@ -20,6 +20,8 @@ public class BallController2 : Entity
     private bool isLoaded = false;
 
     private float moveInput;
+    private float moveInput2;
+    private float moveInput3;
 
     private bool flagJumpUpdate = true;
 
@@ -50,16 +52,19 @@ public class BallController2 : Entity
         CheckGround();
 
         moveInput = joystick.Horizontal;
-
+        moveInput2 = Input.GetAxis("Horizontal");
+        moveInput3 = joystick.Vertical;
 
     }
 
     private void Update()
     {
-        if (moveInput != 0)
+        if (moveInput != 0 || moveInput2 != 0) 
+        {
             Run();
+        }
 
-        if ((Input.GetAxis("Vertical") == -1) && (isLoaded == true))
+        if (((Input.GetAxis("Vertical") < -0.1) || (moveInput3 < 0)) && (isLoaded == true))
         {
             Diving();
         }
@@ -97,25 +102,36 @@ public class BallController2 : Entity
 
     private void Run()
     {
-        rb.AddForce(new Vector2(moveInput * speedMove, 0f), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(moveInput * speedMove * Time.deltaTime * 300, 0f), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(moveInput2 * speedMove * Time.deltaTime * 300, 0f), ForceMode2D.Impulse);
 
         //transform.position += new Vector3(moveInput, 0, 0) * speedMove * Time.deltaTime;
 
         Vector3 rotation = transform.rotation.eulerAngles;
         rotation.z -= moveInput * speedRotation * Time.deltaTime * 100;
+        rotation.z -= moveInput2 * speedRotation * Time.deltaTime * 100;
         transform.rotation = Quaternion.Euler(rotation);
     }
 
     private void Diving()
     {
-        rb.AddForce(Vector2.down * divingForce);
+        rb.AddForce(Vector2.down * divingForce * Time.deltaTime * 250);
     }
 
     private void Jump()
     {
-         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+         rb.AddForce(Vector2.up * jumpForce * Time.deltaTime * 225, ForceMode2D.Impulse);
         //rb.velocity = Vector2.up * jumpForce;
         //rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+    }
+
+    public void JumpOnButton()
+    {
+        if ((jumpCount > 0))
+        {
+            jumpCount--;
+            Jump();
+        }
     }
 
     private void CheckGround()
