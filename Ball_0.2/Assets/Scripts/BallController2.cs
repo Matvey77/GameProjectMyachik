@@ -19,7 +19,7 @@ public class BallController2 : Entity
 
     private bool isLoaded = false;
 
-    private float movement;
+    private float moveInput;
 
     private bool flagJumpUpdate = true;
 
@@ -27,6 +27,8 @@ public class BallController2 : Entity
     public float checkDistanseToGround;
     public LayerMask whatIsGround;
     public LayerMask whatIsGround2;
+
+    public Joystick joystick;
 
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
@@ -47,14 +49,14 @@ public class BallController2 : Entity
     {
         CheckGround();
 
-        movement = Input.GetAxis("Horizontal");
+        moveInput = joystick.Horizontal;
 
 
     }
 
     private void Update()
     {
-        if (Input.GetButton("Horizontal"))
+        if (moveInput != 0)
             Run();
 
         if ((Input.GetAxis("Vertical") == -1) && (isLoaded == true))
@@ -95,12 +97,12 @@ public class BallController2 : Entity
 
     private void Run()
     {
-        rb.AddForce(new Vector2(movement * speedMove, 0f), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(moveInput * speedMove, 0f), ForceMode2D.Impulse);
 
-        //transform.position += new Vector3(movement, 0, 0) * speedMove * Time.deltaTime;
+        //transform.position += new Vector3(moveInput, 0, 0) * speedMove * Time.deltaTime;
 
         Vector3 rotation = transform.rotation.eulerAngles;
-        rotation.z -= movement * speedRotation * Time.deltaTime * 100;
+        rotation.z -= moveInput * speedRotation * Time.deltaTime * 100;
         transform.rotation = Quaternion.Euler(rotation);
     }
 
