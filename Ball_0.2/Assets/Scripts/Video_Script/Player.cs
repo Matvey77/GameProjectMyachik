@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Scripting.APIUpdating;
@@ -24,6 +23,8 @@ namespace WhiteBall
         private void Start()
         {
             _rigidbody= GetComponent<Rigidbody2D>();
+
+            Instance = this;
         }
 
         private void FixedUpdate()
