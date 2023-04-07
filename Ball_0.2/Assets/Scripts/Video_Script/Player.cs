@@ -15,7 +15,8 @@ namespace WhiteBall
 
         [SerializeField] private HUD _hud;
         public Joystick _joystick;
-        private float _direction;
+        private float directionJostick;
+        private float directionKeyboard;
         private Rigidbody2D _rigidbody;
 
         public static Player Instance { get; set; }
@@ -29,19 +30,22 @@ namespace WhiteBall
 
         private void FixedUpdate()
         {
-            _direction = _joystick.Horizontal;
+            directionJostick = _joystick.Horizontal;
+            directionKeyboard = Input.GetAxis("Horizontal");
             Move();
         }
 
         public void Move()
         {
-            Vector2 movement = new Vector2(_direction * _speed, _rigidbody.velocity.y);
+            Vector2 movement = new Vector2(directionJostick * _speed, _rigidbody.velocity.y);
+            Vector2 movement2 = new Vector2(directionKeyboard * _speed, _rigidbody.velocity.y);
             _rigidbody.AddForce(movement);
+            _rigidbody.AddForce(movement2);
         }
 
         public void Jump()
         {
-            if (_rigidbody.IsTouchingLayers())
+            if (_rigidbody.IsTouchingLayers(LayerMask.GetMask("Ground")))
             {
                 _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _jumpPower);
             }
