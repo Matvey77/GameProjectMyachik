@@ -35,6 +35,15 @@ namespace WhiteBall
             Move();
         }
 
+        private void Update()
+        {
+            if (transform.position.y < -20)
+            {
+                SceneManager.LoadScene(0);
+            }
+
+        }
+
         public void Move()
         {
             Vector2 movement = new Vector2(directionJostick * _speed, _rigidbody.velocity.y);
@@ -54,7 +63,7 @@ namespace WhiteBall
         public void TakeDamage(float damage)
         {
             _health -= damage;
-            _hud.DestroyHeart();
+            //_hud.DestroyHeart();
             if (_health <= 0)
                 SceneManager.LoadScene(0);
         }
